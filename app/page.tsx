@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import { MEALS } from "@/lib/menuData";
 
 export default function HomePage() {
   return (
@@ -16,17 +17,17 @@ export default function HomePage() {
           أقوى كبسة ودجاج مشوي بطعم سعودي أصيل.
         </p>
 
-        {/* Search */}
+        {/* Search bar */}
         <div className="mt-6 bg-white rounded-[30px] shadow-[0_8px_25px_rgba(200,50,43,0.10)] p-4 flex items-center gap-3">
           <input
             placeholder="...ابحث عن وجبتك"
-            className="flex-1 text-sm outline-none"
+            className="flex-1 text-sm outline-none bg-transparent"
           />
           <span className="text-[#C8322B] text-xl">🔍</span>
         </div>
       </section>
 
-      {/* CATEGORY TABS */}
+      {/* CATEGORIES */}
       <section className="px-6 mt-6">
         <div className="flex gap-3 overflow-x-auto text-sm font-semibold">
           <button className="px-5 py-2 rounded-full bg-[#F28C38] text-white shadow">
@@ -41,53 +42,46 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* MEAL CARDS */}
-      <section className="px-6 mt-6 pb-16 space-y-6">
-        {/* CARD 1 */}
-        <div className="flex items-center gap-4 bg-white rounded-[30px] p-4 shadow-[0_10px_30px_rgba(200,50,43,0.12)]">
-          <div className="w-[80px] h-[80px] rounded-2xl bg-[#F7C948]"></div>
+      {/* MEAL CARDS – زي العمود اللي في نص الصورة */}
+      <section className="px-6 mt-6 pb-16 space-y-4">
+        {MEALS.map((meal) => (
+          <Link
+            key={meal.id}
+            href={`/meal/${meal.id}`}
+            className="block bg-white rounded-[26px] p-4 shadow-[0_8px_24px_rgba(200,50,43,0.12)] active:scale-[0.98] transition"
+          >
+            <div className="flex items-center gap-4">
+              {/* Placeholder للصورة – تقدر تحط Image فعلي بعدين */}
+              <div className="w-[72px] h-[72px] rounded-2xl bg-[#F7C948]" />
 
-          <div className="flex-1">
-            <h3 className="text-lg font-extrabold text-[#A62822]">
-              وجبه النص فرخه
-            </h3>
-            <p className="text-[#C8322B] text-sm">نص فرخة مشوية + أرز</p>
+              <div className="flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-base font-extrabold text-[#A62822]">
+                    {meal.name}
+                  </h3>
+                  {meal.badge && (
+                    <span className="text-[10px] px-2 py-1 rounded-full bg-[#FCE4D6] text-[#C8322B] font-bold">
+                      {meal.badge}
+                    </span>
+                  )}
+                </div>
 
-            <div className="mt-2 flex items-center justify-between">
-              <span className="text-xl font-bold text-[#F28C38]">222 جنيه</span>
+                <p className="text-[#C8322B] text-xs mt-1">
+                  {meal.description}
+                </p>
 
-              <Link
-                href="/order?meal=وجبه النص فرخه"
-                className="bg-[#F28C38] text-white px-4 py-2 rounded-full shadow font-semibold hover:scale-[1.03] transition"
-              >
-                اطلب الآن
-              </Link>
+                <div className="mt-2 flex items-center justify-between">
+                  <span className="text-lg font-bold text-[#F28C38]">
+                    {meal.price} جنيه
+                  </span>
+                  <span className="text-xs text-[#C8322B]">
+                    اضغط للتفاصيل والطلب
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        {/* CARD 2 */}
-        <div className="flex items-center gap-4 bg-white rounded-[30px] p-4 shadow-[0_10px_30px_rgba(200,50,43,0.12)]">
-          <div className="w-[80px] h-[80px] rounded-2xl bg-[#F7C948]"></div>
-
-          <div className="flex-1">
-            <h3 className="text-lg font-extrabold text-[#A62822]">
-              وجبه الفرخه الكامله
-            </h3>
-            <p className="text-[#C8322B] text-sm">فرخة كاملة مشوية + أرز</p>
-
-            <div className="mt-2 flex items-center justify-between">
-              <span className="text-xl font-bold text-[#F28C38]">444 جنيه</span>
-
-              <Link
-                href="/order?meal=وجبه الفرخه الكامله"
-                className="bg-[#F28C38] text-white px-4 py-2 rounded-full shadow font-semibold hover:scale-[1.03] transition"
-              >
-                اطلب الآن
-              </Link>
-            </div>
-          </div>
-        </div>
+          </Link>
+        ))}
       </section>
     </div>
   );
