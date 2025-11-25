@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
 import {
   ADDONS,
   AddonId,
@@ -37,6 +36,10 @@ export function OrderForm({
 
   const totalPrice = useMemo(() => calcTotalPrice(data), [data]);
 
+  // ⭐ Fix TypeScript Error
+  const mealPrice =
+    MEAL_PRICES[data.mealName as keyof typeof MEAL_PRICES] || 0;
+
   const handleAddonChange = (id: AddonId, delta: 1 | -1) => {
     setData((prev) => {
       const current = prev.addonQuantities[id] ?? 0;
@@ -59,7 +62,7 @@ export function OrderForm({
 
   return (
     <div className="max-w-xl mx-auto">
-      {/* --- Checkout Card --- */}
+      {/* Checkout Card */}
       <div className="bg-white rounded-3xl shadow-[0_10px_35px_rgba(0,0,0,0.12)] overflow-hidden">
 
         {/* IMAGE */}
@@ -83,6 +86,7 @@ export function OrderForm({
               </p>
             </div>
 
+            {/* Quantity Controls */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() =>
@@ -116,7 +120,7 @@ export function OrderForm({
 
           {/* Price */}
           <p className="text-lg font-bold text-[#C72F1D]">
-            {MEAL_PRICES[data.mealName]} جنيه
+            {mealPrice} جنيه
           </p>
 
           {/* Addons */}
@@ -179,7 +183,7 @@ export function OrderForm({
 
               <input
                 placeholder="العنوان بالتفصيل"
-                className="input"
+                className="input w-full"
                 value={data.address}
                 onChange={(e) =>
                   setData((d) => ({ ...d, address: e.target.value }))
