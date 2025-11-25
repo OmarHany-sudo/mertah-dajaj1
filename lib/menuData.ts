@@ -1,9 +1,45 @@
+// lib/menuData.ts
+
+// أسعار الوجبات الأساسية
 export const MEAL_PRICES = {
   "وجبه النص فرخه": 222,
   "وجبه الفرخه الكامله": 444,
 } as const;
 
-// نوع الإضافات (حتى لو مافي إضافات)
+// تعريف الوجبة لصفحات الـ UI
+export type MealId = "half-chicken" | "full-chicken";
+
+export interface Meal {
+  id: MealId;
+  name: string;
+  description: string;
+  price: number;
+  badge?: string;
+}
+
+// نفس الوجبات لكن بشكل Structured للـ UI
+export const MEALS: Meal[] = [
+  {
+    id: "half-chicken",
+    name: "وجبه النص فرخه",
+    description: "نص فرخة مشوية + أرز",
+    price: MEAL_PRICES["وجبه النص فرخه"],
+    badge: "الأكثر طلبًا",
+  },
+  {
+    id: "full-chicken",
+    name: "وجبه الفرخه الكامله",
+    description: "فرخة كاملة مشوية + أرز",
+    price: MEAL_PRICES["وجبه الفرخه الكامله"],
+  },
+];
+
+export function getMealById(id: string): Meal | undefined {
+  return MEALS.find((m) => m.id === id);
+}
+
+// ---- الإضافات (لسه فاضية لو حابب تزود بعدين) ----
+
 export type AddonId =
   | "rice_pudding"
   | "daqoos"
@@ -12,13 +48,11 @@ export type AddonId =
   | "small_water"
   | "large_water";
 
-// قائمة الإضافات — تقدر تخليها فاضية ولكن النوع لازم يبقى موجود
 export const ADDONS: { id: AddonId; name: string; price: number }[] = [
-  // لو مش عايز إضافات حالياً، خليه فاضي كده:
-  // { id: "rice_pudding", name: "رز بلبن", price: 15 },
+  // مثال لو حبيت تضيف بعدين:
+  // { id: "rice_pudding", name: "رز بلبن", price: 25 },
 ];
 
-// هيكل البيانات
 export interface OrderFormData {
   mealName: string;
   mealQuantity: number;
@@ -35,7 +69,7 @@ export interface OrderFormData {
   addonQuantities: Record<AddonId, number>;
 }
 
-// إنشاء طلب جديد
+// إنشاء نموذج طلب فاضي
 export function createEmptyOrder(mealName: string): OrderFormData {
   const addonQuantities: Record<AddonId, number> = {
     rice_pudding: 0,
